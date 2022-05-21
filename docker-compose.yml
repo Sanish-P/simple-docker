@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  web:
+    build:
+      context: ./web
+      dockerfile: DockerFile
+    container_name: my_vite_app_build
+    restart: unless-stopped
+    volumes:
+      - build-volume/:/code/dist/
+    command: tail -F anything
+  
+  api:
+    image: sanishp/trynode:1.0
+    container_name: my_vite_app_api
+    restart: unless-stopped
+    ports:
+      - 8081:8080
+  
+  nginx:
+    image: nginx:alpine
+    container_name: my_vite_app
+    restart: unless-stopped
+    ports:
+      - 9000:80
+    volumes:
+      - build-volume/:/usr/share/nginx/html
+      - ./web/nginx/:/etc/nginx/nginx.conf:ro
+volumes:
+  build-volume:
