@@ -1,8 +1,12 @@
 version: 2.1
+general:
+  branches:
+    only:
+      - master
 jobs:
   deploy:
     docker:
-      image: circleci/node:chakracore-8.11.1
+      - image: circleci/node:chakracore-8.11.1
     steps:
       - checkout
       - run:
