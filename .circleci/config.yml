@@ -1,0 +1,21 @@
+version: 2.1
+jobs:
+  deploy:
+    docker:
+      image: circleci/node:chakracore-8.11.1
+    steps:
+      - checkout
+      - run:
+          name: Deploy
+          command: |
+            ssh -o StrictHostKeyChecking=no ${AWS_USER}@${AWS_EC2_IP} \
+            "echo start deployment && \
+            cd ~/docker-simple
+            git pull && \
+            sudo docker-compose up --build && \
+            echo end deployment"
+workflows:
+  version: 2.1
+  deploy_app:
+    jobs:
+      - deploy
